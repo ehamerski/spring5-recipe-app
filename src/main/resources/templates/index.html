@@ -7,13 +7,21 @@
 <body>
 <!--/*@thymesVar id="recipe" type="guru.springframework.recipe.domain.Recipe"*/-->
 <!--/*@thymesVar id="ingredient" type="guru.springframework.recipe.domain.Ingredient"*/-->
+<!--/*@thymesVar id="category" type="guru.springframework.recipe.domain.Category"*/-->
 <h1>Recipe List</h1>
+<hr/>
 
 <section th:each="recipe : ${recipes}">
     <h2 th:text="${recipe.description}">Description</h2>
     <p>By <span th:text="${recipe.source}">Source</span></p>
-    <p>Preparation Time: <span th:text="${recipe.prepTime}">Preparation Time</span> min | Cooking Time: <span th:text="${recipe.cookTime}">Cooking Time</span> min</p>
-    <img th:src="@{'data:image/png;base64,' + ${recipe.base64Image} }" width="500px"/>
+    <p>
+        Difficulty: <span th:text="${recipe.difficulty}">Difficulty</span> |
+        Preparation Time: <span th:text="${recipe.prepTime}">Preparation Time</span> min |
+        Cooking Time: <span th:text="${recipe.cookTime}">Cooking Time</span> min |
+        Servings: Up to <span th:text="${recipe.servings}">Servings</span> |
+        Category: <span th:each="category : ${recipe.categories}" th:text="${category.description} + ' '">Category</span>
+    </p>
+    <!-- img th:src="@{'data:image/png;base64,' + ${recipe.base64Image} }" width="500px"/ -->
     <img th:src="@{'data:image/png;base64,' + ${@imageHelperImpl.toBase64(recipe.image)} }" width="500px"/>
     <h3>Ingredients</h3>
     <ingredient th:each="ingredient : ${recipe.ingredients}">
@@ -21,6 +29,8 @@
     </ingredient>
     <h3>Directions</h3>
     <pre th:text="${recipe.directions}">Directions</pre>
+    <h3>Notes</h3>
+    <pre th:text="${recipe.notes.recipeNotes}">Notes</pre>
     <hr/>
 </section>
 

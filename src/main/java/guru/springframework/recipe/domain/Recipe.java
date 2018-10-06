@@ -10,6 +10,9 @@ import java.util.Set;
 
 @Entity
 public class Recipe {
+    @Transient
+    private static ImageHelper imageHelper = null;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -104,6 +107,13 @@ public class Recipe {
         return directions;
     }
 
+    // fluent interface ...
+    public Recipe addIngredient(Ingredient ingredient) {
+        ingredient.setRecipe(this);
+        this.ingredients.add(ingredient);
+        return this;
+    }
+
     public void setDirections(String directions) {
         this.directions = directions;
     }
@@ -130,6 +140,7 @@ public class Recipe {
 
     public void setNotes(Notes notes) {
         this.notes = notes;
+        notes.setRecipe(this);
     }
 
     public Difficulty getDifficulty() {
@@ -149,7 +160,13 @@ public class Recipe {
     }
 
     public String getBase64Image() {
-        ImageHelper imageHelper = BeanUtil.getBean(ImageHelperImpl.class);
+        if (imageHelper == null) {
+            synchronized (this) {
+                if (imageHelper == null) {
+                    imageHelper = BeanUtil.getBean(ImageHelperImpl.class);
+                }
+            }
+        }
         return imageHelper.toBase64(image);
     }
 }

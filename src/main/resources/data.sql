@@ -11,3 +11,4 @@ INSERT INTO unit_of_measure (description) VALUES ('Ounce');
 INSERT INTO unit_of_measure (description) VALUES ('Ripe');
 INSERT INTO unit_of_measure (description) VALUES ('Unit');
 INSERT INTO unit_of_measure (description) VALUES ('Dash');
+INSERT INTO unit_of_measure (description) VALUES ('Pint');
