@@ -3,36 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <title>Recipe Home</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </head>
 <body>
 <!--/*@thymesVar id="recipe" type="guru.springframework.recipe.domain.Recipe"*/-->
 <!--/*@thymesVar id="ingredient" type="guru.springframework.recipe.domain.Ingredient"*/-->
 <!--/*@thymesVar id="category" type="guru.springframework.recipe.domain.Category"*/-->
-<h1>Recipe List</h1>
-<hr/>
-
-<section th:each="recipe : ${recipes}">
-    <h2 th:text="${recipe.description}">Description</h2>
-    <p>By <span th:text="${recipe.source}">Source</span></p>
-    <p>
-        Difficulty: <span th:text="${recipe.difficulty}">Difficulty</span> |
-        Preparation Time: <span th:text="${recipe.prepTime}">Preparation Time</span> min |
-        Cooking Time: <span th:text="${recipe.cookTime}">Cooking Time</span> min |
-        Servings: Up to <span th:text="${recipe.servings}">Servings</span> |
-        Category: <span th:each="category : ${recipe.categories}" th:text="${category.description} + ' '">Category</span>
-    </p>
-    <!-- img th:src="@{'data:image/png;base64,' + ${recipe.base64Image} }" width="500px"/ -->
-    <img th:src="@{'data:image/png;base64,' + ${@imageHelperImpl.toBase64(recipe.image)} }" width="500px"/>
-    <h3>Ingredients</h3>
-    <ingredient th:each="ingredient : ${recipe.ingredients}">
-        <p><span th:text="${ingredient.amount}">Amount</span> <span th:text="${ingredient.uom.description}">Unit of Measure</span> <span th:text="${ingredient.description}">Description</span></p>
-    </ingredient>
-    <h3>Directions</h3>
-    <pre th:text="${recipe.directions}">Directions</pre>
-    <h3>Notes</h3>
-    <pre th:text="${recipe.notes.recipeNotes}">Notes</pre>
-    <hr/>
-</section>
-
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card" style="margin-top: 20px">
+                <div class="card-header">
+                    <h1 class="card-title">My Recipes!</h1>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive" th:if="${not #lists.isEmpty(recipes)}">
+                        <table class="table table-hover">
+                            <thead class="thead-inverse-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Description</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:remove="all">
+                                <td th:text="${recipe.id}">id</td>
+                                <td th:text="${recipe.description}">description</td>
+                            </tr>
+                            <tr th:remove="all">
+                                <td th:text="${recipe.id}">id</td>
+                                <td th:text="${recipe.description}">description</td>
+                            </tr>
+                            <tr th:each="recipe : ${recipes}">
+                                <td th:text="${recipe.id}">id</td>
+                                <td th:text="${recipe.description}">description</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card" th:each="recipe : ${recipes}" style="margin-top: 20px">
+                <div class="card-header">
+                    <h1 class="card-title" th:text="${recipe.description}">description</h1>
+                </div>
+                <div class="card-body">
+                    <section> <!--/*th:each="recipe : ${recipes}"*/-->
+                        <!--/*h2 th:text="${recipe.description}">Description</h2*/-->
+                        <p>By <span th:text="${recipe.source}">Source</span></p>
+                        <p>
+                            Difficulty: <span th:text="${recipe.difficulty}">Difficulty</span> |
+                            Preparation Time: <span th:text="${recipe.prepTime}">Preparation Time</span> min |
+                            Cooking Time: <span th:text="${recipe.cookTime}">Cooking Time</span> min |
+                            Servings: Up to <span th:text="${recipe.servings}">Servings</span> |
+                            Category: <span th:each="category : ${recipe.categories}" th:text="${category.description} + ' '">Category</span>
+                        </p>
+                        <!-- img th:src="@{'data:image/png;base64,' + ${recipe.base64Image} }" width="500px"/ -->
+                        <img th:src="@{'data:image/png;base64,' + ${@imageHelperImpl.toBase64(recipe.image)} }" width="500px"/>
+                        <h3>Ingredients</h3>
+                        <ingredient th:each="ingredient : ${recipe.ingredients}">
+                            <p><span th:text="${ingredient.amount}">Amount</span> <span th:text="${ingredient.uom.description}">Unit of Measure</span> <span th:text="${ingredient.description}">Description</span></p>
+                        </ingredient>
+                        <h3>Directions</h3>
+                        <pre th:text="${recipe.directions}">Directions</pre>
+                        <h3>Notes</h3>
+                        <pre th:text="${recipe.notes.recipeNotes}">Notes</pre>
+                        <hr/>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
