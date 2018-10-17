@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show Recipe</title>
+
+    <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+            integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+            crossorigin="anonymous"
+            th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}">
+
+    <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
+
+    <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"
+            th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<!--/*@thymesVar id="recipe" type="guru.springframework.recipe.domain.Recipe"*/-->
+<!--/*@thymesVar id="ingredient" type="guru.springframework.recipe.domain.Ingredient"*/-->
+<!--/*@thymesVar id="category" type="guru.springframework.recipe.domain.Category"*/-->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel-group">
+                <div class="panel panel-primary" style="margin-top: 20px">
+                    <div class="panel-heading">
+                        <h1 class="panel-title" th:text="${recipe.description}">Recipe Description</h1>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <img class="img-responsive" th:src="@{'data:image/png;base64,' + ${@imageHelperImpl.toBase64(recipe.image)} }" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h5>Categories:</h5>
+                            </div>
+                            <div class="col-md-9">
+                                <ul>
+                                    <li th:remove="all">cat one</li>
+                                    <li th:remove="all">cat two</li>
+                                    <li th:each="category : ${recipe.categories}" th:text="${category.description}">category</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <p>Prep. Time:</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p th:text="${recipe.prepTime} + ' min'">30 min</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p>Difficult:</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p th:text="${recipe.difficulty}">EASY</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <p>Cook Time:</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p th:text="${recipe.cookTime} + ' min'">30 min</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p>Servings:</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p th:text="${recipe.servings}">4</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <p>Source:</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p th:text="${recipe.source}">John Smith</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p>URL:</p>
+                            </div>
+                            <div class="col-md-3">
+                                <a th:href="${recipe.url}" th:text="${recipe.url.substring(0, 20)}">http://www.example.com</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h1 class="panel-title">Ingredients</h1>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <ul>
+                                    <li th:remove="all">1 Cup of milk</li>
+                                    <li th:remove="all">1 Teaspoon of chocolate</li>
+                                    <li th:each="ingredient : ${recipe.ingredients}"
+                                        th:text="${ingredient.amount} + ' ' +
+                                                 ${ingredient.uom.description} + ' - ' +
+                                                 ${ingredient.description}">
+                                        <!--
+                                        <span th:text="${ingredient.amount}">amount</span>&nbsp;
+                                        <span th:text="${ingredient.uom.description}">uom</span>&nbsp;
+                                        <span th:text="${ingredient.description}">description</span>
+                                        -->
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h1 class="panel-title">Directions</h1>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <!-- I prefer a <pre> that wil parse the \n chars in the content. -->
+                                <pre th:text="${recipe.directions}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum pharetra ipsum nec pharetra dictum. Aenean eros enim, pretium ac imperdiet quis, auctor vel est. Donec vitae nunc turpis. Fusce tristique diam mi, eget dignissim justo lacinia nec. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h1 class="panel-title">Notes</h1>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <!-- I prefer a <pre> that wil parse the \n chars in the content. -->
+                                <pre th:text="${recipe.notes.recipeNotes}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum pharetra ipsum nec pharetra dictum. Aenean eros enim, pretium ac imperdiet quis, auctor vel est. Donec vitae nunc turpis. Fusce tristique diam mi, eget dignissim justo lacinia nec. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
