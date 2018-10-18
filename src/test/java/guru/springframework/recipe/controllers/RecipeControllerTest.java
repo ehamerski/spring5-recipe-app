@@ -23,6 +23,7 @@ public class RecipeControllerTest {
     private RecipeService recipeService;
 
     private RecipeController controller;
+
     private MockMvc mockMvc;
 
     @Before
