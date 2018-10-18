@@ -6,7 +6,6 @@ import guru.springframework.recipe.repositories.CategoryRepository;
 import guru.springframework.recipe.repositories.RecipeRepository;
 import guru.springframework.recipe.repositories.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -63,8 +62,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         guacamole.setCookTime(0);
         guacamole.setServings(4);
         guacamole.setSource("ELISE BAUER");
-        guacamole.setUrl("https://www.simplyrecipes.com/recipes/perfect_guacamole/");
-        guacamole.setImage(imageHelper.getImageBytes("https://www.simplyrecipes.com/wp-content/uploads/2014/05/guacamole-horiz-a-1600.jpg"));
+        guacamole.setUrl("https://www.simplyrecipes.com/wp-content/uploads/2014/05/guacamole-horiz-a-1600.jpg");
         guacamole.setDifficulty(Difficulty.EASY);
         log.debug("Adding categories...");
         guacamole.getCategories().add(mexican);
@@ -111,8 +109,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         tacos.setCookTime(15);
         tacos.setServings(6);
         tacos.setSource("SALLY VARGAS");
-        tacos.setUrl("https://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos");
-        tacos.setImage(imageHelper.getImageBytes("https://www.simplyrecipes.com/wp-content/uploads/2017/05/2017-05-29-GrilledChickenTacos-2.jpg"));
+        tacos.setUrl("https://www.simplyrecipes.com/wp-content/uploads/2017/05/2017-05-29-GrilledChickenTacos-2.jpg");
         tacos.setDifficulty(Difficulty.EASY);
         log.debug("Adding categories...");
         tacos.getCategories().add(mexican);

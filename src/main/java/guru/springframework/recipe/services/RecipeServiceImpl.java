@@ -26,6 +26,7 @@ public class RecipeServiceImpl implements RecipeService {
         this.recipeToRecipeCommand = recipeToRecipeCommand;
     }
 
+    @Override
     public Set<Recipe> getRecipeList() {
         log.debug("Executing getRecipeList()...");
         Set<Recipe> rslt = new HashSet<>();
@@ -46,10 +47,22 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Transactional
     @Override
+    public RecipeCommand findCommandById(Long id) {
+        return recipeToRecipeCommand.convert(findById(id));
+    }
+
+    @Transactional
+    @Override
     public RecipeCommand saveRecipeCommand(RecipeCommand command) {
         Recipe detachedRecipe = recipeCommandToRecipe.convert(command);
         Recipe savedRecipe = recipeRepository.save(detachedRecipe);
         log.debug("Saved RecipeId: " + savedRecipe.getId());
         return recipeToRecipeCommand.convert(savedRecipe);
+    }
+
+    @Transactional
+    @Override
+    public void deleteById(Long id) {
+        recipeRepository.deleteById(id);
     }
 }

@@ -11,7 +11,7 @@ import java.util.Base64;
 @Component
 public class ImageHelperImpl implements ImageHelper {
     public Byte[] getImageBytes(String imageUrl) {
-        Byte[] bytes = null;
+        Byte[] bytes = new Byte[0];
 
         URL url = null;
         URLConnection urlConnection = null;

@@ -1,10 +1,8 @@
 package guru.springframework.recipe.domain;
 
 import guru.springframework.recipe.BeanUtil;
-import guru.springframework.recipe.helpers.ImageHelper;
 import guru.springframework.recipe.helpers.ImageHelperImpl;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -13,9 +11,6 @@ import java.util.Set;
 @Data
 @Entity
 public class Recipe {
-    @Transient
-    private static ImageHelper imageHelper = null;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -50,6 +45,14 @@ public class Recipe {
     )
     private Set<Category> categories = new HashSet<>();
 
+    public Byte[] getImage() {
+        if (image == null && url != null) {
+            this.setImage(BeanUtil.getBean(ImageHelperImpl.class).getImageBytes(url));
+        }
+
+        return image;
+    }
+
     // fluent interface ...
     public Recipe addIngredient(Ingredient ingredient) {
         ingredient.setRecipe(this);
@@ -65,13 +68,6 @@ public class Recipe {
     }
 
     public String getBase64Image() {
-        if (imageHelper == null) {
-            synchronized (this) {
-                if (imageHelper == null) {
-                    imageHelper = BeanUtil.getBean(ImageHelperImpl.class);
-                }
-            }
-        }
-        return imageHelper.toBase64(image);
+        return BeanUtil.getBean(ImageHelperImpl.class).toBase64(this.getImage());
     }
 }
