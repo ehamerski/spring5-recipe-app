@@ -1,6 +1,7 @@
 package guru.springframework.recipe.domain;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 

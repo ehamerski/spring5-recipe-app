@@ -1,9 +1,7 @@
 package guru.springframework.recipe.converters;
 
 import guru.springframework.recipe.commands.CategoryCommand;
-import guru.springframework.recipe.commands.UnitOfMeasureCommand;
 import guru.springframework.recipe.domain.Category;
-import guru.springframework.recipe.domain.UnitOfMeasure;
 import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.Nullable;
