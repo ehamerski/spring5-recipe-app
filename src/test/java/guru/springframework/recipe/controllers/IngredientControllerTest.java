@@ -1,6 +1,8 @@
 package guru.springframework.recipe.controllers;
 
+import guru.springframework.recipe.commands.IngredientCommand;
 import guru.springframework.recipe.commands.RecipeCommand;
+import guru.springframework.recipe.services.IngredientService;
 import guru.springframework.recipe.services.RecipeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +20,9 @@ public class IngredientControllerTest {
     @Mock
     private RecipeService recipeService;
 
+    @Mock
+    private IngredientService ingredientService;
+
     private IngredientController controller;
 
     private MockMvc mockMvc;
@@ -25,7 +30,7 @@ public class IngredientControllerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        controller = new IngredientController(recipeService);
+        controller = new IngredientController(recipeService, ingredientService);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -33,15 +38,33 @@ public class IngredientControllerTest {
     public void testListIngredients() throws Exception {
         // given
         RecipeCommand command = new RecipeCommand();
-        when(recipeService.findCommandById(anyLong())).thenReturn(command);
 
         // when
+        when(recipeService.findCommandById(anyLong())).thenReturn(command);
+
+        // then
         mockMvc.perform(get("/recipe/1/ingredients"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("recipe"))
                 .andExpect(view().name("recipe/ingredient/list"));
 
-        // then
         verify(recipeService, times(1)).findCommandById(anyLong());
+    }
+
+    @Test
+    public void testShowRecipeIngredient() throws Exception {
+        // given
+        IngredientCommand command = new IngredientCommand();
+
+        // when
+        when(ingredientService.findByRecipeIdAndIngredientId(anyLong(), anyLong())).thenReturn(command);
+
+        // then
+        mockMvc.perform(get("/recipe/1/ingredient/2/show"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("ingredient"))
+                .andExpect(view().name("recipe/ingredient/show"));
+
+        verify(ingredientService, times(1)).findByRecipeIdAndIngredientId(anyLong(),anyLong());
     }
 }
