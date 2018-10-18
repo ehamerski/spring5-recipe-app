@@ -3,7 +3,7 @@ package guru.springframework.recipe.controllers;
 import guru.springframework.recipe.services.RecipeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class IndexController {
@@ -23,7 +23,7 @@ public class IndexController {
         this.recipeService = recipeService;
     }
 
-    @RequestMapping({"", "/", "/index"})
+    @GetMapping({"", "/", "/index"})
     public String getIndexPage(Model model) {
         /*
         Optional<Category> optionalCategory = categoryRepository.findByDescription("American");
