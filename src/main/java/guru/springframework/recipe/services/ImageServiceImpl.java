@@ -1,6 +1,7 @@
 package guru.springframework.recipe.services;
 
 import guru.springframework.recipe.domain.Recipe;
+import guru.springframework.recipe.helpers.ImageHelper;
 import guru.springframework.recipe.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,9 +14,11 @@ import java.io.IOException;
 @Service
 public class ImageServiceImpl implements ImageService {
     private final RecipeRepository recipeRepository;
+    private final ImageHelper imageHelper;
 
-    public ImageServiceImpl(RecipeRepository recipeService) {
+    public ImageServiceImpl(RecipeRepository recipeService, ImageHelper imageHelper) {
         this.recipeRepository = recipeService;
+        this.imageHelper = imageHelper;
     }
 
     @Override
@@ -23,12 +26,7 @@ public class ImageServiceImpl implements ImageService {
     public void saveImageFile(Long recipeId, MultipartFile file) {
         try {
             Recipe recipe = recipeRepository.findById(recipeId).get();
-            Byte[] byteObjects = new Byte[file.getBytes().length];
-            int i = 0;
-            for (byte b : file.getBytes()){
-                byteObjects[i++] = b;
-            }
-            recipe.setImage(byteObjects);
+            recipe.setImage(imageHelper.toByteArray(file.getBytes()));
             recipeRepository.save(recipe);
         } catch (IOException e) {
             //todo handle better

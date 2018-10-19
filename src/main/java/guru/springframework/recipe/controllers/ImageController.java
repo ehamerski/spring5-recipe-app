@@ -1,6 +1,7 @@
 package guru.springframework.recipe.controllers;
 
 import guru.springframework.recipe.commands.RecipeCommand;
+import guru.springframework.recipe.helpers.ImageHelper;
 import guru.springframework.recipe.services.ImageService;
 import guru.springframework.recipe.services.RecipeService;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -21,10 +22,12 @@ import java.io.InputStream;
 public class ImageController {
     private final ImageService imageService;
     private final RecipeService recipeService;
+    private final ImageHelper imageHelper;
 
-    public ImageController(ImageService imageService, RecipeService recipeService) {
+    public ImageController(ImageService imageService, RecipeService recipeService, ImageHelper imageHelper) {
         this.imageService = imageService;
         this.recipeService = recipeService;
+        this.imageHelper = imageHelper;
     }
 
     @GetMapping("recipe/{id}/image")
@@ -43,13 +46,8 @@ public class ImageController {
     public void renderImageFromDB(@PathVariable String id, HttpServletResponse response) throws IOException {
         RecipeCommand recipeCommand = recipeService.findCommandById(Long.valueOf(id));
         if (recipeCommand.getImage() != null) {
-            byte[] byteArray = new byte[recipeCommand.getImage().length];
-            int i = 0;
-            for (Byte wrappedByte : recipeCommand.getImage()){
-                byteArray[i++] = wrappedByte; //auto unboxing
-            }
             response.setContentType("image/jpeg");
-            InputStream is = new ByteArrayInputStream(byteArray);
+            InputStream is = new ByteArrayInputStream(imageHelper.toByteArray(recipeCommand.getImage()));
             IOUtils.copy(is, response.getOutputStream());
         }
     }

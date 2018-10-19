@@ -1,6 +1,8 @@
 package guru.springframework.recipe.services;
 
 import guru.springframework.recipe.domain.Recipe;
+import guru.springframework.recipe.helpers.ImageHelper;
+import guru.springframework.recipe.helpers.ImageHelperImpl;
 import guru.springframework.recipe.repositories.RecipeRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,10 +25,13 @@ public class ImageServiceImplTest {
 
     ImageService imageService;
 
+    ImageHelper imageHelper;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        imageService = new ImageServiceImpl(recipeRepository);
+        imageHelper = new ImageHelperImpl();
+        imageService = new ImageServiceImpl(recipeRepository, imageHelper);
     }
 
     @Test

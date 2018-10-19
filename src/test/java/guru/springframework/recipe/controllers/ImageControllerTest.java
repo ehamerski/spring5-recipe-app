@@ -1,6 +1,8 @@
 package guru.springframework.recipe.controllers;
 
 import guru.springframework.recipe.commands.RecipeCommand;
+import guru.springframework.recipe.helpers.ImageHelper;
+import guru.springframework.recipe.helpers.ImageHelperImpl;
 import guru.springframework.recipe.services.ImageService;
 import guru.springframework.recipe.services.RecipeService;
 import org.junit.Before;
@@ -20,19 +22,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class ImageControllerTest {
     @Mock
-    ImageService imageService;
+    private ImageService imageService;
 
     @Mock
-    RecipeService recipeService;
+    private RecipeService recipeService;
 
-    ImageController controller;
+    private ImageHelper imageHelper;
 
-    MockMvc mockMvc;
+    private ImageController controller;
+
+    private MockMvc mockMvc;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        controller = new ImageController(imageService, recipeService);
+        imageHelper = new ImageHelperImpl();
+        controller = new ImageController(imageService, recipeService, imageHelper);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -68,18 +73,11 @@ public class ImageControllerTest {
     @Test
     public void renderImageFromDB() throws Exception {
         // given
+        String s = "fake image text";
+
         RecipeCommand command = new RecipeCommand();
         command.setId(1L);
-
-        String s = "fake image text";
-        Byte[] bytesBoxed = new Byte[s.getBytes().length];
-
-        int i = 0;
-        for (byte primByte : s.getBytes()){
-            bytesBoxed[i++] = primByte;
-        }
-
-        command.setImage(bytesBoxed);
+        command.setImage(imageHelper.toByteArray(s.getBytes()));
 
         when(recipeService.findCommandById(anyLong())).thenReturn(command);
 
@@ -88,7 +86,7 @@ public class ImageControllerTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse();
 
-        byte[] reponseBytes = response.getContentAsByteArray();
-        assertEquals(s.getBytes().length, reponseBytes.length);
+        byte[] responseBytes = response.getContentAsByteArray();
+        assertEquals(s.getBytes().length, responseBytes.length);
     }
 }
