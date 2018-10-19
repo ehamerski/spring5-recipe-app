@@ -31,7 +31,7 @@ public class Recipe {
     private Set<Ingredient> ingredients = new HashSet<>();
 
     @Lob
-    private Byte[] image;
+    private Byte[] image = new Byte[0];
 
     @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
@@ -46,14 +46,6 @@ public class Recipe {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private Set<Category> categories = new HashSet<>();
-
-    public Byte[] getImage() {
-        if (image == null && url != null) {
-            this.setImage(BeanUtil.getBean(ImageHelperImpl.class).getImageBytes(url));
-        }
-
-        return image;
-    }
 
     // fluent interface ...
     public Recipe addIngredient(Ingredient ingredient) {
